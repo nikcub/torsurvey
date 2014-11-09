@@ -47,7 +47,7 @@ class DbManager(object):
 
   def get_all(self):
     sites = []
-    for row in self.cur.execute("select id, host from sites order by checked desc, id asc"):
+    for row in self.cur.execute("select id, host from sites order by checked asc, id asc"):
       sites.append((row[0], row[1]))
     return sites
 

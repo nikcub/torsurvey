@@ -112,10 +112,11 @@ class TorController(object):
     for sid, host in self.db.get_all():
       url = "http://%s" % host
       r = self.ap.req(url)
-      title = self.get_title(r.text)
-      description = self.get_description(r.text)
-      print "%s - %s - %s - %s" % (host, r.status_code, len(r.text), title)
-      self.db.update_site(sid, r.status_code, title, r.text, description)
+      if r:
+        title = self.get_title(r.text)
+        description = self.get_description(r.text)
+        print "%s - %s - %s - %s" % (host, r.status_code, len(r.text), title)
+        self.db.update_site(sid, r.status_code, title, r.text, description)
 
 
 
