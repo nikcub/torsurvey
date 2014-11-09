@@ -27,7 +27,7 @@ $ ./torsurvey-cli --help
 
 Command line options:
 
-``
+```
 optional arguments:
   -h, --help            show this help message and exit
   -v                    verbose output
@@ -40,7 +40,7 @@ optional arguments:
   --proxy_type PROXY_TYPE
                         proxy type (default: http
   --quiet               quite (only error output)
-``
+```
 
 To add onion hosts extracted from a URL:
 
