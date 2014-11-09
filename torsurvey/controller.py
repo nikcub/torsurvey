@@ -9,7 +9,7 @@ import tempfile
 import logging
 from urlparse import urlparse
 from urllib import urlencode
-# from BeautifulSoup import BeautifulSoup as bs
+from BeautifulSoup import BeautifulSoup as bs
 import re
 
 class TorController(object):
@@ -76,16 +76,46 @@ class TorController(object):
         print "Added %s" % u
     print "Inserted %d" % inserted
 
-  def update_ticker(self):
-    r = self.ap.req('ticker')
-    con = self.db.getdb()
-    cur = con.cursor()
-    sql = "INSERT INTO quotes VALUES(%s, %s, %s, %s, %s, %s, %s)" % (r['timestamp'], r['last'], r['volume'], r['high'], r['low'], r['bid'], r['ask'])
-    try:
-      cur.execute(sql)
-    except Exception, e:
-      pass
-    con.commit()
+  def get_description(self, content):
+    s = bs(content)
+
+    desc = s.find('meta', attrs={'name': 'description'})
+
+    if desc and 'content' in desc:
+      return desc['content']
+
+    return ""
+
+  def get_title(self, content):
+    s = bs(content)
+
+    og_site_name = s.find('meta', property="og:site_name")
+    og_title = s.find('meta', property="og:title")
+    meta_appname = s.find('meta', attrs={'name': 'application-name'})
+    site_title = s.title
+
+    if og_site_name and hasattr(og_site_name, 'content'):
+      return og_site_name['content']
+
+    if og_title and hasattr(og_title, 'content'):
+      return og_title['content']
+
+    if meta_appname and hasattr(meta_appname, 'content'):
+      return meta_appname['content']
+
+    if site_title and hasattr(site_title, 'string'):
+      return site_title.string
+
+    return ""
+
+  def survey(self):
+    for sid, host in self.db.get_all():
+      url = "http://%s" % host
+      r = self.ap.req(url)
+      title = self.get_title(r.text)
+      description = self.get_description(r.text)
+      print "%s - %s - %s - %s" % (host, r.status_code, len(r.text), title)
+      self.db.update_site(sid, r.status_code, title, r.text, description)
 
 
 

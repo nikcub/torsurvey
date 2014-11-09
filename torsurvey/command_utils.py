@@ -52,7 +52,7 @@ def main(argv=[]):
     return True
 
   elif args.command == 'flushdb':
-    db.flush()
+    dbi.flush()
     print "Cleared db"
 
   elif args.command == 'fetch':
