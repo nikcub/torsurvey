@@ -5,7 +5,7 @@ Scripts and tools to update a catalog of all Tor hosted hidden servers and surve
 ## Requirements
 
  * requesocks - connect to Tor SOCKS server
- * beautifulsoup - parse hidden site data
+ * beautifulsoup - pbparse hidden site data
 
 ## Install
 
