@@ -25,6 +25,7 @@ def get_parser():
   parser_config.add_argument('url', type=str, help='option name', nargs='?')
 
   parser_config = subparsers.add_parser('read', help='read onion addresses from file')
+  parser_config.add_argument('--no-insert', dest='noinsert', action='store_true', help='show only no insert')
   parser_config.add_argument('filepath', type=str, help='option name', nargs='?')
 
   parser_update = subparsers.add_parser('flushdb', help='clear database')

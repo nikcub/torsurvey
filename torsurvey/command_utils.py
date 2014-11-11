@@ -66,7 +66,7 @@ def main(argv=[]):
   elif args.command == 'read':
     if not args.filepath:
       logging.error("Need file to read onion addresses from")
-    f = tc.read_sitelist(args.filepath)
+    f = tc.read_sitelist(args.filepath, (not args.noinsert))
 
   elif args.command == 'survey':
     tc.survey()

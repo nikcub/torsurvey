@@ -62,12 +62,17 @@ class TorController(object):
       for u in urls:
         print u
 
-  def read_sitelist(self, filepath):
+  def read_sitelist(self, filepath, insert=True):
     if not os.path.isfile(filepath):
       logging.error("Invalid file path: %s" % filepath)
     with open(filepath, 'r') as fh:
       content = fh.read()
-    return self.parse_content_for_urls(content)
+    urls = self.parse_content_for_urls(content)
+    if insert:
+      self.db.minsert(urls)
+    else:
+      for u in urls:
+        print u
 
   def parse_content_for_urls(self, content):
     urls = re.findall(r'([a-z0-9]{16}\.onion)', content)
@@ -114,8 +119,14 @@ class TorController(object):
       url = "http://%s" % host
       r = self.ap.req(url)
       if isinstance(r, Response):
-        title = self.get_title(r.text)
-        description = self.get_description(r.text)
+        try:
+          title = self.get_title(r.text)
+        except Exception:
+          title = None
+        try:
+          description = self.get_description(r.text)
+        except Exception:
+          description = None
         print "%s - %s - %s - %s" % (host, r.status_code, len(r.text), title)
         self.db.update_site(sid, r.status_code, title, r.text, description)
       else:
