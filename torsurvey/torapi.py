@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-  cexbot.cexapi
+  torsurvey.torapi
 """
 
 import requesocks as requests
@@ -49,12 +49,12 @@ class TorAPI(object):
 
   def req(self, url, extras={}):
     try:
-      r = self.session.request('GET', url, allow_redirects=True, headers=self.headers)
+      r = self.session.request('GET', url, allow_redirects=True, timeout=10, headers=self.headers)
+      return r
     except requesocks.exceptions.ConnectionError, e:
       logging.error("Bad connection cannot connect to %s" % url)
-      return False
-    # if r.headers['Content-Type'] != 'text/json' or not r.text:
-    #   logging.error("Request error (%s)" % r.text[:200])
-    #   return False
-    # print r
-    return r
+      return -1
+    except Exception, e:
+      logging.error("%s: %s" % (url, e))
+      return -1
+

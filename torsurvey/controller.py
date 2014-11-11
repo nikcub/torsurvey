@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-  cexbot.cexapi
+ torsurvey.controller
 """
 
 import sys
@@ -11,6 +11,7 @@ from urlparse import urlparse
 from urllib import urlencode
 from BeautifulSoup import BeautifulSoup as bs
 import re
+from requesocks import Response
 
 class TorController(object):
 
@@ -112,11 +113,13 @@ class TorController(object):
     for sid, host in self.db.get_all():
       url = "http://%s" % host
       r = self.ap.req(url)
-      if r:
+      if isinstance(r, Response):
         title = self.get_title(r.text)
         description = self.get_description(r.text)
         print "%s - %s - %s - %s" % (host, r.status_code, len(r.text), title)
         self.db.update_site(sid, r.status_code, title, r.text, description)
+      else:
+        self.db.update_site_status(sid, 0)
 
 
 

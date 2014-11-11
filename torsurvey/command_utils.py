@@ -34,7 +34,7 @@ def main(argv=[]):
   proxy_type = args.proxy_type
 
   if args.command == 'version':
-    print cexbot.get_version()
+    print torsurvey.get_version()
     return True
 
   elif args.command == 'update':

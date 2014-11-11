@@ -65,6 +65,10 @@ class DbManager(object):
       return row_id
     return False
 
+  def update_site_status(self, id, status_code):
+    self.cur.execute("UPDATE sites SET status=?, checked=CURRENT_TIMESTAMP where ID=?", (status_code, id))
+    self.conn.commit()
+
   def minsert(self, urls):
     inserted = 0
     for u in urls:
