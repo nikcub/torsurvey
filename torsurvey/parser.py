@@ -15,6 +15,7 @@ def get_parser():
   parser.add_argument('--proxy_port', dest='proxy_port', default=9050, type=int, help='proxy port (default: 9050)')
   parser.add_argument('--proxy_type', dest='proxy_type', default='http', type=str, help='proxy type (default: http')
   parser.add_argument('--quiet', dest='quiet', action='store_true', help='quite (only error output)')
+  parser.add_argument('--timeout', dest='timeout', type=int, default=10, help='connection timeout')
 
   subparsers = parser.add_subparsers(description='available subcommands', dest="command")
 

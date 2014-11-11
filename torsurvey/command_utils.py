@@ -40,7 +40,7 @@ def main(argv=[]):
   elif args.command == 'update':
     return updater.check_update()
 
-  ac = torapi.TorAPI(proxy_host=proxy_host, proxy_port=proxy_port, proxy_type=proxy_type)
+  ac = torapi.TorAPI(proxy_host=proxy_host, proxy_port=proxy_port, proxy_type=proxy_type, timeout=args.timeout)
   dbi = db.DbManager("sites.db")
   dbi.init()
   tc = controller.TorController(ac, dbi)

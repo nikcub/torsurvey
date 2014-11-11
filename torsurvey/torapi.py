@@ -25,10 +25,11 @@ class TorAPI(object):
     "https": "socks5://127.0.0.1:9030"
   }
 
-  def __init__(self, proxy_host='127.0.0.1', proxy_port='9040', proxy_type='socks5'):
+  def __init__(self, proxy_host='127.0.0.1', proxy_port='9040', proxy_type='socks5', timeout=10):
     self.proxy_host = proxy_host
     self.proxy_port = proxy_port
     self.proxy_type = proxy_type
+    self.timeout = timeout
     self.proxy = {}
     self.proxy['http'] = "%s://%s:%d" % (proxy_type, proxy_host, int(proxy_port))
     self.proxy['https'] = "%s://%s:%d" % (proxy_type, proxy_host, int(proxy_port))
@@ -49,7 +50,7 @@ class TorAPI(object):
 
   def req(self, url, extras={}):
     try:
-      r = self.session.request('GET', url, allow_redirects=True, timeout=10, headers=self.headers)
+      r = self.session.request('GET', url, allow_redirects=True, timeout=self.timeout, headers=self.headers)
       return r
     except requesocks.exceptions.ConnectionError, e:
       logging.error("Bad connection cannot connect to %s" % url)
