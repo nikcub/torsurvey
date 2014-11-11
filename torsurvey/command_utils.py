@@ -41,7 +41,7 @@ def main(argv=[]):
     return updater.check_update()
 
   ac = torapi.TorAPI(proxy_host=proxy_host, proxy_port=proxy_port, proxy_type=proxy_type, timeout=args.timeout)
-  dbi = db.DbManager("sites.db")
+  dbi = db.DbManager(args.dbpath)
   dbi.init()
   tc = controller.TorController(ac, dbi)
   # cx = CexMethods(ac, dbi)
@@ -69,7 +69,7 @@ def main(argv=[]):
     f = tc.read_sitelist(args.filepath, (not args.noinsert))
 
   elif args.command == 'survey':
-    tc.survey()
+    tc.survey(args.deadonly)
 
   elif args.command == 'list':
     dbi.list()

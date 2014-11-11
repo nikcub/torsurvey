@@ -45,9 +45,12 @@ class DbManager(object):
     c = self.conn.execute("SELECT * from sites where host=?", url)
     print c.fetchone()
 
-  def get_all(self):
+  def get_all(self, deadonly=False):
+    sql_query = "select id, host from sites order by checked asc, id asc"
+    if deadonly:
+      sql_query = "select id, host from sites where status!=200 order by checked asc, id asc"
     sites = []
-    for row in self.cur.execute("select id, host from sites order by checked asc, id asc"):
+    for row in self.cur.execute(sql_query):
       sites.append((row[0], row[1]))
     return sites
 

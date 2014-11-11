@@ -10,6 +10,7 @@ def get_parser():
 
   parser.add_argument('-v', dest='verbose', action='store_true', help='verbose output')
   parser.add_argument('-d', dest='debug', action='store_true', help='debug output (Warning: lots of output, for developers)')
+  parser.add_argument('--db', dest='dbpath', type=str, default='sites.db', help='database path')
   parser.add_argument('--proxy', dest='proxy', type=str, default=False, help='proxy string')
   parser.add_argument('--proxy_host', dest='proxy_host', default='127.0.0.1', type=str, help='proxy host (default: 127.0.0.1')
   parser.add_argument('--proxy_port', dest='proxy_port', default=9050, type=int, help='proxy port (default: 9050)')
@@ -31,6 +32,7 @@ def get_parser():
   parser_update = subparsers.add_parser('flushdb', help='clear database')
 
   parser_update = subparsers.add_parser('survey', help='survey onion sites in database')
+  parser_update.add_argument('--deadonly', dest='deadonly', action='store_true', help='check dead sites in db only')
 
   parser_update = subparsers.add_parser('list', help='list onion sites in database')
 

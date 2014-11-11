@@ -114,8 +114,8 @@ class TorController(object):
 
     return ""
 
-  def survey(self):
-    for sid, host in self.db.get_all():
+  def survey(self, deadonly=False):
+    for sid, host in self.db.get_all(deadonly=deadonly):
       url = "http://%s" % host
       r = self.ap.req(url)
       if isinstance(r, Response):
