@@ -65,6 +65,15 @@ class DbManager(object):
       return row_id
     return False
 
+  def minsert(self, urls):
+    inserted = 0
+    for u in urls:
+      r = self.insert_site(u)
+      if r:
+        inserted = inserted + 1
+        logging.info("Added %s" % u)
+    logging.info("Inserted %d" % inserted)
+
   def insert_site(self, url, schema='http', title=None, content=None):
     self.cur.execute("INSERT INTO sites (host, schema, title, content, inserted) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)", (url, schema, title, content))
     self.conn.commit()

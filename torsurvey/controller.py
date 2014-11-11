@@ -21,10 +21,10 @@ class TorController(object):
 
   def write_cache(self, url, content):
     tmp_file = self.get_temp_path(url)
-    print "temporary file at %s" % tmp_file
+    logging.info("temporary file at %s" % tmp_file)
     with open(tmp_file, 'w') as fh:
       fh.write(content.encode('utf-8'))
-      print "Wrote %s to %s" % (len(content), os.path.abspath(fh.name))
+      logging.info("Wrote %s to %s" % (len(content), os.path.abspath(fh.name)))
 
   def get_temp_filename(self, url):
     u = urlparse(url)
@@ -42,7 +42,7 @@ class TorController(object):
       os.mkdir(temp_dir)
     return os.path.join(temp_dir, self.get_temp_filename(url))
 
-  def fetch_sitelist(self, url=None, cache=False):
+  def fetch_sitelist(self, url=None, cache=False, insert=True):
     cache_path = self.get_temp_path(url)
     if os.path.isfile(cache_path) and cache:
       with open(cache_path, 'r') as fh:
@@ -53,8 +53,13 @@ class TorController(object):
         return False
       content = r.text
       self.write_cache(url, content)
-    print "Got length: %d" % (int(len(content)))
-    return self.parse_content_for_urls(content)
+    logging.info("Got length: %d" % (int(len(content))))
+    urls = self.parse_content_for_urls(content)
+    if insert:
+      self.db.minsert(urls)
+    else:
+      for u in urls:
+        print u
 
   def read_sitelist(self, filepath):
     if not os.path.isfile(filepath):
@@ -67,14 +72,9 @@ class TorController(object):
     urls = re.findall(r'([a-z0-9]{16}\.onion)', content)
     urls = list(set(urls))
     urls_num = int(len(urls))
-    print "Found %d urls" % urls_num
-    inserted = 0
-    for u in urls:
-      r = self.db.insert_site(u)
-      if r:
-        inserted = inserted + 1
-        print "Added %s" % u
-    print "Inserted %d" % inserted
+    logging.info("Found %d urls" % urls_num)
+    return urls
+
 
   def get_description(self, content):
     s = bs(content)

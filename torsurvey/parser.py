@@ -19,6 +19,7 @@ def get_parser():
   subparsers = parser.add_subparsers(description='available subcommands', dest="command")
 
   parser_config = subparsers.add_parser('fetch', help='fetch onion addresses from url')
+  parser_config.add_argument('--no-insert', dest='noinsert', action='store_true', help='show only no insert')
   parser_config.add_argument('--cache', dest='cache', action='store_true', help='use request cache')
   parser_config.add_argument('url', type=str, help='option name', nargs='?')
 
@@ -30,6 +31,7 @@ def get_parser():
   parser_update = subparsers.add_parser('survey', help='survey onion sites in database')
 
   parser_update = subparsers.add_parser('list', help='list onion sites in database')
+
 
   parser_update = subparsers.add_parser('update', help='check for updates')
 

@@ -60,7 +60,7 @@ def main(argv=[]):
       logging.error("URL to fetch from required")
       return False
     print "Fetching from %s " % args.url
-    f = tc.fetch_sitelist(args.url, args.cache)
+    f = tc.fetch_sitelist(args.url, args.cache, (not args.noinsert))
     return True
 
   elif args.command == 'read':
