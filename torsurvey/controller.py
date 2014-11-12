@@ -83,34 +83,40 @@ class TorController(object):
 
 
   def get_description(self, content):
-    s = bs(content)
+    try:
+      s = bs(content)
 
-    desc = s.find('meta', attrs={'name': 'description'})
+      desc = s.find('meta', attrs={'name': 'description'})
 
-    if desc and 'content' in desc:
-      return desc['content']
+      if desc and 'content' in desc:
+        return desc['content']
+    except Exception:
+      pass
 
     return ""
 
   def get_title(self, content):
-    s = bs(content)
+    try:
+      s = bs(content)
 
-    og_site_name = s.find('meta', property="og:site_name")
-    og_title = s.find('meta', property="og:title")
-    meta_appname = s.find('meta', attrs={'name': 'application-name'})
-    site_title = s.title
+      og_site_name = s.find('meta', property="og:site_name")
+      og_title = s.find('meta', property="og:title")
+      meta_appname = s.find('meta', attrs={'name': 'application-name'})
+      site_title = s.title
 
-    if og_site_name and hasattr(og_site_name, 'content'):
-      return og_site_name['content']
+      if og_site_name and hasattr(og_site_name, 'content'):
+        return og_site_name['content']
 
-    if og_title and hasattr(og_title, 'content'):
-      return og_title['content']
+      if og_title and hasattr(og_title, 'content'):
+        return og_title['content']
 
-    if meta_appname and hasattr(meta_appname, 'content'):
-      return meta_appname['content']
+      if meta_appname and hasattr(meta_appname, 'content'):
+        return meta_appname['content']
 
-    if site_title and hasattr(site_title, 'string'):
-      return site_title.string
+      if site_title and hasattr(site_title, 'string'):
+        return site_title.string
+    except Exception:
+      pass
 
     return ""
 
@@ -118,19 +124,30 @@ class TorController(object):
     for sid, host in self.db.get_all(deadonly=deadonly):
       url = "http://%s" % host
       r = self.ap.req(url)
-      if isinstance(r, Response):
-        try:
-          title = self.get_title(r.text)
-        except Exception:
-          title = None
-        try:
-          description = self.get_description(r.text)
-        except Exception:
-          description = None
-        print "%s - %s - %s - %s" % (host, r.status_code, len(r.text), title)
-        self.db.update_site(sid, r.status_code, title, r.text, description)
-      else:
+
+      # bug fix for requsocks library typo
+      if r.encoding == "uft-8":
+        r.encoding = "utf-8"
+
+      if not isinstance(r, Response):
         self.db.update_site_status(sid, 0)
+        continue
+
+      # proxy error
+      if r.status_code == 503:
+        r.status_code = 0
+        self.db.update_site_status(sid, 0)
+        continue
+
+      title = self.get_title(r.text)
+      description = self.get_description(r.text)
+
+      if title == None:
+        title = ""
+
+      logging.warning("%s - %s - %s" % (host, r.status_code, title))
+      self.db.update_site(sid, r.status_code, title, r.text, description)
+
 
 
 
