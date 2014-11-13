@@ -125,13 +125,13 @@ class TorController(object):
       url = "http://%s" % host
       r = self.ap.req(url)
 
-      # bug fix for requsocks library typo
-      if r.encoding == "uft-8":
-        r.encoding = "utf-8"
-
       if not isinstance(r, Response):
         self.db.update_site_status(sid, 0)
         continue
+
+      # bug fix for requsocks library typo
+      if r.encoding == "uft-8":
+        r.encoding = "utf-8"
 
       # proxy error
       if r.status_code == 503:
