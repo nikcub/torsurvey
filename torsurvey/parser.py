@@ -12,9 +12,9 @@ def get_parser():
   parser.add_argument('-d', dest='debug', action='store_true', help='debug output (Warning: lots of output, for developers)')
   parser.add_argument('--db', dest='dbpath', type=str, default='sites.db', help='database path')
   parser.add_argument('--proxy', dest='proxy', type=str, default=False, help='proxy string')
-  parser.add_argument('--proxy_host', dest='proxy_host', default='127.0.0.1', type=str, help='proxy host (default: 127.0.0.1')
-  parser.add_argument('--proxy_port', dest='proxy_port', default=9050, type=int, help='proxy port (default: 9050)')
-  parser.add_argument('--proxy_type', dest='proxy_type', default='http', type=str, help='proxy type (default: http')
+  parser.add_argument('--proxy-host', dest='proxy_host', default='127.0.0.1', type=str, help='proxy host (default: 127.0.0.1')
+  parser.add_argument('--proxy-port', dest='proxy_port', default=9050, type=int, help='proxy port (default: 9050)')
+  parser.add_argument('--proxy-type', dest='proxy_type', default='http', type=str, help='proxy type (default: http')
   parser.add_argument('--quiet', dest='quiet', action='store_true', help='quite (only error output)')
   parser.add_argument('--timeout', dest='timeout', type=int, default=10, help='connection timeout')
 
