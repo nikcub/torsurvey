@@ -6,7 +6,7 @@ Default command line utitlities to run torsurvey
 """
 
 import os, sys, logging
-import torsurvey, db, parser, updater, controller, torapi
+import torsurvey, db, parser, updater, controller, torapi, config
 
 def main(argv=[]):
   args = parser.get_parser()
@@ -32,6 +32,8 @@ def main(argv=[]):
   proxy_host = args.proxy_host
   proxy_port = args.proxy_port
   proxy_type = args.proxy_type
+
+  config.first_run()
 
   if args.command == 'version':
     print torsurvey.get_version()
