@@ -1,5 +1,5 @@
-BeautifulSoup==3.2.1
-certifi==14.05.14
-chardet==2.3.0
-requesocks==0.10.8
-wsgiref==0.1.2
+BeautifulSoup>=3.2.1
+certifi>=14.05.14
+chardet>=2.3.0
+requesocks>=0.10.8
+wsgiref>=0.1.2
